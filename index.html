@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Member Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    #directory {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .portal-header {
+      margin-bottom: 52px;
+    }
+
+    .portal-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .portal-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .category-section { margin-bottom: 44px; }
+
+    .category-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px 20px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: #d0ccc4;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .card-description {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .card-arrow {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+  </style>
+</head>
+<body>
+<div id="directory" class="fade-in">
+
+  <div class="portal-header">
+    <h1>Member Resources</h1>
+    <p>Everything you need, in one place.</p>
+  </div>
+
+  <!-- Onboarding -->
+  <div class="category-section">
+    <div class="category-label">Onboarding</div>
+    <div class="cards-grid">
+      <a class="card" href="onboarding/welcome.html">
+        <div class="card-title">Welcome Guide</div>
+        <div class="card-description">Everything you need to know for your first day in the space.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="onboarding/agreement.html">
+        <div class="card-title">Member Agreement</div>
+        <div class="card-description">Review and sign your membership terms and conditions.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="onboarding/access.html">
+        <div class="card-title">Access & Key Fob Setup</div>
+        <div class="card-description">Request building access credentials and manage your key fob.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Amenities -->
+  <div class="category-section">
+    <div class="category-label">Amenities</div>
+    <div class="cards-grid">
+      <a class="card" href="amenities/rooms.html">
+        <div class="card-title">Meeting Room Booking</div>
+        <div class="card-description">Reserve conference rooms and private spaces for your team.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="amenities/printing.html">
+        <div class="card-title">Printing & Scanning</div>
+        <div class="card-description">Instructions and access codes for the printer network.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="amenities/wifi.html">
+        <div class="card-title">Wi-Fi & IT Support</div>
+        <div class="card-description">Network credentials and how to reach our IT helpdesk.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Community -->
+  <div class="category-section">
+    <div class="category-label">Community</div>
+    <div class="cards-grid">
+      <a class="card" href="community/events.html">
+        <div class="card-title">Events Calendar</div>
+        <div class="card-description">Browse and RSVP for upcoming workshops, socials, and talks.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="community/perks.html">
+        <div class="card-title">Member Perks</div>
+        <div class="card-description">Exclusive discounts and offers from our partner network.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Admin -->
+  <div class="category-section">
+    <div class="category-label">Admin</div>
+    <div class="cards-grid">
+      <a class="card" href="admin/billing.html">
+        <div class="card-title">Billing & Invoices</div>
+        <div class="card-description">Download invoices and manage your payment information.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+      <a class="card" href="admin/feedback.html">
+        <div class="card-title">Feedback Form</div>
+        <div class="card-description">Share suggestions or report an issue with our team.</div>
+        <div class="card-arrow">Open ›</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
