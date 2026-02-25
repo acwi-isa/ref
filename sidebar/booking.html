@@ -1,21 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Room Calendar</title>
-  <link rel="stylesheet" href="../style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resource Booking Request</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a2e;
+      --ink-soft: #4a4a6a;
+      --ink-faint: #9898b8;
+      --surface: #f7f6f2;
+      --surface-card: #ffffff;
+      --accent: #c8a96e;
+      --accent-dark: #a8893e;
+      --rule: #e8e6df;
+      --error: #c0392b;
+      --success: #2e7d5a;
+      --radius: 4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--ink);
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(200,169,110,0.12);
+      pointer-events: none;
+    }
+    .header-inner {
+      max-width: 660px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .header-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: #ffffff;
+      line-height: 1.15;
+      font-weight: 400;
+    }
+    .header h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .header-sub {
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .form-wrapper {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ── Section blocks ── */
+    .section {
+      margin-bottom: 2rem;
+      background: var(--surface-card);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.45s ease forwards;
+    }
+    .section:nth-child(1) { animation-delay: 0.05s; }
+    .section:nth-child(2) { animation-delay: 0.12s; }
+    .section:nth-child(3) { animation-delay: 0.19s; }
+    .section:nth-child(4) { animation-delay: 0.26s; }
+    .section:nth-child(5) { animation-delay: 0.33s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-number {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .section-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    /* ── Form fields ── */
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+    }
+    label .req { color: var(--accent-dark); margin-left: 2px; }
+
+    input, select, textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.85rem;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200,169,110,0.15);
+    }
+    input.error, select.error, textarea.error {
+      border-color: var(--error);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a4a6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      padding-right: 2.2rem;
+      cursor: pointer;
+    }
+    select option { color: var(--ink); }
+
+    .field-hint {
+      font-size: 0.73rem;
+      color: var(--ink-faint);
+      line-height: 1.5;
+    }
+    .field-error {
+      font-size: 0.73rem;
+      color: var(--error);
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    /* ── Hidden member info strip ── */
+    .member-strip {
+      background: var(--ink);
+      color: rgba(255,255,255,0.65);
+      font-size: 0.75rem;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .member-strip span { display: flex; align-items: center; gap: 0.4rem; }
+    .member-strip strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+    /* ── Contacts ── */
+    .contacts-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 0.6rem;
+      align-items: end;
+      animation: fadeUp 0.25s ease forwards;
+    }
+    .contact-row input { margin: 0; }
+    .btn-remove {
+      background: none;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-faint);
+      transition: border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-remove:hover { border-color: var(--error); color: var(--error); }
+    .btn-add {
+      background: none;
+      border: 1px dashed var(--rule);
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: border-color 0.2s, color 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-add:hover { border-color: var(--accent); color: var(--accent-dark); }
+
+    /* ── Checkbox group (equipment) ── */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--ink);
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .checkbox-label:hover { border-color: var(--accent); }
+    .checkbox-label input[type="checkbox"] {
+      width: 15px; height: 15px;
+      accent-color: var(--accent-dark);
+      flex-shrink: 0;
+      margin: 0; padding: 0;
+    }
+    .checkbox-label.checked {
+      border-color: var(--accent);
+      background: rgba(200,169,110,0.06);
+    }
+
+    /* ── Submit ── */
+    .submit-area {
+      margin-top: 0.5rem;
+      animation: fadeUp 0.45s ease 0.4s both;
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--ink);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover { background: #2d2d4e; }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit .btn-text { transition: opacity 0.2s; }
+    .btn-submit .btn-loading {
+      position: absolute; inset: 0;
+      display: none; align-items: center; justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-submit.loading .btn-text { opacity: 0; }
+    .btn-submit.loading .btn-loading { display: flex; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Success state ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--surface-card);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .success-screen.visible { display: block; }
+    .success-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--success);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .success-icon svg { color: white; }
+    .success-screen h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+    .success-screen p {
+      color: var(--ink-soft);
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 0.9rem;
+    }
+
+    /* ── Error banner ── */
+    .error-banner {
+      background: #fdf2f2;
+      border: 1px solid #f5c6c6;
+      border-radius: var(--radius);
+      padding: 0.9rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--error);
+      display: none;
+      margin-bottom: 1rem;
+    }
+    .error-banner.visible { display: block; }
+
+    @media (max-width: 520px) {
+      .field-row { grid-template-columns: 1fr; }
+      .checkbox-group { grid-template-columns: 1fr; }
+      .contact-row { grid-template-columns: 1fr auto; }
+      .contact-row input:last-of-type { grid-column: 1; }
+    }
+  </style>
 </head>
 <body>
-  <!-- This page embeds an external form/PDF via iframe -->
-  <div class="iframe-page fade-in">
-    <!-- Replace the src URL below with your actual form or PDF link -->
-    <iframe
-      src="https://teamup.com/ksxf6r9ew1vxrbjkhg"
-      title="Calendar"
-      allowfullscreen>
-    </iframe>
-  </div>
 
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">Aspire</div>
+    <h1>Request a <em>Booking</em></h1>
+    <p class="header-sub">Submit your request below. Our team will review and confirm your booking shortly.</p>
+  </div>
+</div>
+
+<!-- Member info strip (populated from URL params) -->
+<div class="member-strip" id="memberStrip" style="display:none">
+  <span>Booking as: <strong id="stripName"></strong></span>
+  <span id="stripCompany" style="display:none">Company: <strong id="stripCompanyName"></strong></span>
+</div>
+
+<div class="form-wrapper">
+  <div id="errorBanner" class="error-banner"></div>
+
+  <form id="bookingForm" novalidate>
+
+    <!-- Hidden fields -->
+    <input type="hidden" id="memberId" name="memberId" />
+    <input type="hidden" id="memberName" name="memberName" />
+    <input type="hidden" id="companyId" name="companyId" />
+    <input type="hidden" id="companyName" name="companyName" />
+
+    <!-- Section 1: Resource -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">1</div>
+        <div class="section-title">Resource</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label for="resourceId">Room / Resource <span class="req">*</span></label>
+          <select id="resourceId" name="resourceId">
+            <option value="">Loading resources…</option>
+          </select>
+          <div class="field-error" id="err-resource">Please select a resource.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Date & Time -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">2</div>
+        <div class="section-title">Date &amp; Time</div>
+      </div>
+      <div class="section-body">
+        <div class="field-row">
+          <div class="field">
+            <label for="date">Date <span class="req">*</span></label>
+            <input type="date" id="date" name="date" />
+            <div class="field-error" id="err-date">Please select a date.</div>
+          </div>
+          <div class="field"><!-- spacer --></div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="startTime">Start Time <span class="req">*</span></label>
+            <input type="time" id="startTime" name="startTime" />
+            <div class="field-error" id="err-start">Please enter a start time.</div>
+          </div>
+          <div class="field">
+            <label for="endTime">End Time <span class="req">*</span></label>
+            <input type="time" id="endTime" name="endTime" />
+            <div class="field-error" id="err-end">Please enter an end time after the start.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Booking Details -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <div class="section-title">Booking Details</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label for="purpose">Purpose / Reason for Booking <span class="req">*</span></label>
+          <textarea id="purpose" name="purpose" placeholder="Briefly describe why you're requesting this space…"></textarea>
+          <div class="field-error" id="err-purpose">Please describe the purpose of your booking.</div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="attendees">Number of Attendees <span class="req">*</span></label>
+            <input type="number" id="attendees" name="attendees" min="1" placeholder="e.g. 8" />
+            <div class="field-error" id="err-attendees">Please enter the expected number of attendees.</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Equipment Needed</label>
+          <div class="checkbox-group" id="equipmentGroup">
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Projector" /> Projector
+            </label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Whiteboard" /> Whiteboard
+            </label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Video Conferencing" /> Video Conferencing
+            </label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Speaker System" /> Speaker System
+            </label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Microphone" /> Microphone
+            </label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
+              <input type="checkbox" name="equipment" value="Catering Setup" /> Catering Setup
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="notes">Special Requests / Notes</label>
+          <textarea id="notes" name="notes" placeholder="Any additional setup requirements, accessibility needs, or other notes…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Additional Contacts -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">4</div>
+        <div class="section-title">Additional Booking Contacts</div>
+      </div>
+      <div class="section-body">
+        <p class="field-hint">Add anyone else who should be associated with this booking request.</p>
+        <div class="contacts-list" id="contactsList"></div>
+        <button type="button" class="btn-add" onclick="addContact()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg>
+          Add a contact
+        </button>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span class="btn-text">Submit Booking Request</span>
+        <span class="btn-loading">
+          <span class="spinner"></span>
+          Submitting…
+        </span>
+      </button>
+    </div>
+
+  </form>
+
+  <!-- Success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2>Request Submitted</h2>
+    <p>Your booking request has been received and is <strong>pending review</strong>.<br/>Our team will confirm or follow up with you shortly.</p>
+  </div>
+</div>
+
+<script>
+  // ── Config ─────────────────────────────────────────────────────────────────
+  // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz50W1fRolQeXVG1Ohp6DSrVHOj9zGsZKiBwBZjWvLAR0Nsw0xiDphK04K3GQ6Zat1Y/exec';
+
+  // ── Read URL params (passed by OfficeRnD portal) ────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const memberId   = params.get('memberId')   || '';
+  const memberName = params.get('memberName') || '';
+  const companyId  = params.get('companyId')  || '';
+  const companyName = params.get('companyName') || '';
+
+  document.getElementById('memberId').value   = memberId;
+  document.getElementById('memberName').value  = memberName;
+  document.getElementById('companyId').value  = companyId;
+  document.getElementById('companyName').value = companyName;
+
+  // Show member strip if we have data
+  if (memberName) {
+    document.getElementById('memberStrip').style.display = 'flex';
+    document.getElementById('stripName').textContent = memberName;
+    if (companyName) {
+      document.getElementById('stripCompany').style.display = 'flex';
+      document.getElementById('stripCompanyName').textContent = companyName;
+    }
+  }
+
+  // Set min date to today
+  document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+  // ── Load resources from Apps Script proxy ──────────────────────────────────
+  async function loadResources() {
+    const sel = document.getElementById('resourceId');
+    try {
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=getResources`);
+      const data = await res.json();
+      sel.innerHTML = '<option value="">Select a room or resource…</option>';
+      (data.resources || []).forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r._id;
+        opt.textContent = r.name + (r.capacity ? ` (cap. ${r.capacity})` : '');
+        sel.appendChild(opt);
+      });
+    } catch (e) {
+      sel.innerHTML = '<option value="">Could not load resources — please refresh</option>';
+    }
+  }
+  loadResources();
+
+  // ── Dynamic contacts ────────────────────────────────────────────────────────
+  let contactCount = 0;
+  function addContact() {
+    contactCount++;
+    const id = contactCount;
+    const list = document.getElementById('contactsList');
+    const row = document.createElement('div');
+    row.className = 'contact-row';
+    row.id = `contact-${id}`;
+    row.innerHTML = `
+      <input type="text"  placeholder="Full name"          data-contact="${id}" data-field="name"  />
+      <input type="email" placeholder="Email address"      data-contact="${id}" data-field="email" />
+      <button type="button" class="btn-remove" title="Remove" onclick="removeContact(${id})">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
+        </svg>
+      </button>`;
+    list.appendChild(row);
+  }
+  function removeContact(id) {
+    document.getElementById(`contact-${id}`)?.remove();
+  }
+
+  // ── Validation ──────────────────────────────────────────────────────────────
+  function showError(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('visible', show);
+  }
+  function markField(id, hasError) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('error', hasError);
+  }
+
+  function validate() {
+    let valid = true;
+    const resource  = document.getElementById('resourceId').value;
+    const date      = document.getElementById('date').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime   = document.getElementById('endTime').value;
+    const purpose   = document.getElementById('purpose').value.trim();
+    const attendees = document.getElementById('attendees').value;
+
+    [['resourceId','err-resource',!resource],
+     ['date','err-date',!date],
+     ['startTime','err-start',!startTime],
+     ['endTime','err-end',!endTime || (startTime && endTime <= startTime)],
+     ['purpose','err-purpose',!purpose],
+     ['attendees','err-attendees',!attendees || parseInt(attendees) < 1]
+    ].forEach(([fieldId, errId, hasErr]) => {
+      markField(fieldId, hasErr);
+      showError(errId, hasErr);
+      if (hasErr) valid = false;
+    });
+    return valid;
+  }
+
+  // ── Collect contacts ─────────────────────────────────────────────────────────
+  function collectContacts() {
+    const contacts = [];
+    const rows = document.querySelectorAll('#contactsList .contact-row');
+    rows.forEach(row => {
+      const name  = row.querySelector('[data-field="name"]')?.value.trim()  || '';
+      const email = row.querySelector('[data-field="email"]')?.value.trim() || '';
+      if (name || email) contacts.push({ name, email });
+    });
+    return contacts;
+  }
+
+  // ── Collect equipment ────────────────────────────────────────────────────────
+  function collectEquipment() {
+    return [...document.querySelectorAll('input[name="equipment"]:checked')]
+      .map(cb => cb.value);
+  }
+
+  // ── Submit ───────────────────────────────────────────────────────────────────
+  document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('errorBanner').classList.remove('visible');
+
+    if (!validate()) {
+      document.querySelector('.field-error.visible')
+        ?.closest('.section')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    const date      = document.getElementById('date').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime   = document.getElementById('endTime').value;
+
+    const payload = {
+      memberId:    document.getElementById('memberId').value,
+      memberName:  document.getElementById('memberName').value,
+      companyId:   document.getElementById('companyId').value,
+      companyName: document.getElementById('companyName').value,
+      resourceId:  document.getElementById('resourceId').value,
+      resourceName: document.getElementById('resourceId').selectedOptions[0]?.text || '',
+      start: new Date(`${date}T${startTime}:00`).toISOString(),
+      end:   new Date(`${date}T${endTime}:00`).toISOString(),
+      purpose:   document.getElementById('purpose').value.trim(),
+      attendees: parseInt(document.getElementById('attendees').value),
+      equipment: collectEquipment(),
+      notes:     document.getElementById('notes').value.trim(),
+      contacts:  collectContacts(),
+    };
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain' }, // text/plain avoids CORS preflight
+      });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('bookingForm').style.display = 'none';
+        document.getElementById('successScreen').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      const banner = document.getElementById('errorBanner');
+      banner.textContent = `Submission failed: ${err.message}. Please try again or contact support.`;
+      banner.classList.add('visible');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  });
+</script>
 </body>
 </html>
