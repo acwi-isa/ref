@@ -6,7 +6,7 @@
   <title>Resource Booking Request</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,355 +25,153 @@
     }
 
     html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--surface);
-      color: var(--ink);
-      min-height: 100vh;
-      padding: 0;
-    }
-
-    /* ── Header ── */
-    .header {
-      background: var(--ink);
-      padding: 2.5rem 2rem 2rem;
-      position: relative;
-      overflow: hidden;
-    }
+    .header { background: var(--ink); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
     .header::before {
-      content: '';
-      position: absolute;
-      top: -40px; right: -40px;
-      width: 220px; height: 220px;
-      border-radius: 50%;
-      background: rgba(200,169,110,0.12);
-      pointer-events: none;
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(200,169,110,0.12); pointer-events: none;
     }
-    .header-inner {
-      max-width: 660px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .header-eyebrow {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.6rem;
-    }
-    .header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
-      color: #ffffff;
-      line-height: 1.15;
-      font-weight: 400;
-    }
-    .header h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .header-sub {
-      margin-top: 0.75rem;
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.55);
-      font-weight: 300;
-      line-height: 1.6;
-    }
+    .header-inner { max-width: 680px; margin: 0 auto; position: relative; }
+    .header-eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 5vw, 2.6rem); color: #fff; line-height: 1.15; font-weight: 400; }
+    .header h1 em { font-style: italic; color: var(--accent); }
+    .header-sub { margin-top: 0.75rem; font-size: 0.875rem; color: rgba(255,255,255,0.55); font-weight: 300; line-height: 1.6; }
 
-    /* ── Layout ── */
-    .form-wrapper {
-      max-width: 660px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
+    .member-strip {
+      background: var(--ink); color: rgba(255,255,255,0.65); font-size: 0.75rem;
+      padding: 0.6rem 1.5rem; display: none; align-items: center; gap: 1.5rem;
+      flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.08);
     }
+    .member-strip strong { color: rgba(255,255,255,0.9); font-weight: 500; }
 
-    /* ── Section blocks ── */
+    .form-wrapper { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
     .section {
-      margin-bottom: 2rem;
-      background: var(--surface-card);
-      border: 1px solid var(--rule);
-      border-radius: var(--radius);
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.45s ease forwards;
+      margin-bottom: 1.5rem; background: var(--surface-card);
+      border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden;
+      opacity: 0; transform: translateY(16px); animation: fadeUp 0.45s ease forwards;
     }
-    .section:nth-child(1) { animation-delay: 0.05s; }
-    .section:nth-child(2) { animation-delay: 0.12s; }
-    .section:nth-child(3) { animation-delay: 0.19s; }
-    .section:nth-child(4) { animation-delay: 0.26s; }
-    .section:nth-child(5) { animation-delay: 0.33s; }
+    .section:nth-child(2) { animation-delay: 0.05s; }
+    .section:nth-child(3) { animation-delay: 0.12s; }
+    .section:nth-child(4) { animation-delay: 0.19s; }
+    .section:nth-child(5) { animation-delay: 0.26s; }
+    .section:nth-child(6) { animation-delay: 0.33s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .section-header { padding: 0.9rem 1.4rem; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 0.6rem; }
+    .section-number { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 0.65rem; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-title { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+    .section-body { padding: 1.4rem; display: flex; flex-direction: column; gap: 1.1rem; }
 
-    .section-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--rule);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .section-number {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--ink);
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: 500;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .section-title {
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
-    .section-body {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    /* ── Form fields ── */
-    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-    label {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      letter-spacing: 0.04em;
-    }
+    label { font-size: 0.75rem; font-weight: 500; color: var(--ink-soft); letter-spacing: 0.04em; }
     label .req { color: var(--accent-dark); margin-left: 2px; }
 
     input, select, textarea {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: var(--ink);
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      border-radius: var(--radius);
-      padding: 0.65rem 0.85rem;
-      width: 100%;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 300;
+      color: var(--ink); background: var(--surface); border: 1px solid var(--rule);
+      border-radius: var(--radius); padding: 0.6rem 0.8rem; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
     }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(200,169,110,0.15);
-    }
-    input.error, select.error, textarea.error {
-      border-color: var(--error);
-    }
-    textarea { resize: vertical; min-height: 90px; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(200,169,110,0.15); }
+    input.error, select.error, textarea.error { border-color: var(--error); }
+    textarea { resize: vertical; min-height: 85px; }
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a4a6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.85rem center;
-      padding-right: 2.2rem;
-      cursor: pointer;
+      background-repeat: no-repeat; background-position: right 0.8rem center; padding-right: 2.2rem; cursor: pointer;
     }
-    select option { color: var(--ink); }
-
-    .field-hint {
-      font-size: 0.73rem;
-      color: var(--ink-faint);
-      line-height: 1.5;
-    }
-    .field-error {
-      font-size: 0.73rem;
-      color: var(--error);
-      display: none;
-    }
+    .field-hint { font-size: 0.72rem; color: var(--ink-faint); line-height: 1.5; }
+    .field-error { font-size: 0.72rem; color: var(--error); display: none; }
     .field-error.visible { display: block; }
 
-    /* ── Hidden member info strip ── */
-    .member-strip {
-      background: var(--ink);
-      color: rgba(255,255,255,0.65);
-      font-size: 0.75rem;
-      padding: 0.6rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .member-strip span { display: flex; align-items: center; gap: 0.4rem; }
-    .member-strip strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+    /* ── Resource detail card ── */
+    #resourceDetail { display: none; border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; }
+    #resourceDetail.visible { display: block; animation: fadeUp 0.3s ease forwards; }
+
+    .rc-loading { padding: 1.1rem 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: var(--ink-faint); font-size: 0.82rem; }
+    .spinner-sm { width: 13px; height: 13px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .rc-inner { padding: 1.1rem 1.2rem; }
+    .rc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem; }
+    .rc-name { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--ink); }
+    .rc-type { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.12rem; }
+    .rc-badge { font-size: 0.7rem; font-weight: 500; padding: 0.22rem 0.6rem; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+    .rc-badge.available { background: #edf7f1; color: #2e7d5a; border: 1px solid #b8e6cd; }
+    .rc-badge.unavailable { background: #fdf2f2; color: #c0392b; border: 1px solid #f5c6c6; }
+    .rc-badge.unknown { background: #f5f5f5; color: var(--ink-faint); border: 1px solid var(--rule); }
+
+    .rc-meta { display: flex; flex-wrap: wrap; gap: 0.45rem 1.1rem; margin-bottom: 0.85rem; }
+    .rc-meta-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; color: var(--ink-soft); font-weight: 300; }
+    .rc-meta-item svg { color: var(--accent); flex-shrink: 0; }
+
+    .rc-divider { height: 1px; background: var(--rule); margin-bottom: 0.85rem; }
+
+    .av-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+    .av-loading { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--ink-faint); }
+
+    .tl-legend { display: flex; gap: 1rem; font-size: 0.67rem; color: var(--ink-faint); margin-bottom: 0.45rem; flex-wrap: wrap; }
+    .tl-legend span { display: flex; align-items: center; gap: 0.3rem; }
+    .tl-swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+    .tl-bar { height: 12px; border-radius: 6px; background: var(--rule); position: relative; overflow: hidden; }
+    .tl-seg { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+    .tl-seg.booked   { background: #f5a8a8; }
+    .tl-seg.selected { background: var(--accent); opacity: 0.85; }
+
+    .tl-hours { display: flex; margin-top: 0.15rem; }
+    .tl-hour  { font-size: 0.61rem; color: var(--ink-faint); flex: 1; }
+
+    .bookings-list { margin-top: 0.55rem; display: flex; flex-direction: column; gap: 0.28rem; }
+    .booking-chip { display: flex; align-items: center; gap: 0.45rem; font-size: 0.75rem; color: var(--ink-soft); }
+    .booking-chip::before { content: ''; width: 8px; height: 8px; border-radius: 2px; background: #f5a8a8; flex-shrink: 0; }
+    .no-bookings { font-size: 0.78rem; color: #2e7d5a; display: flex; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
+    .conflict-warn { margin-top: 0.5rem; font-size: 0.77rem; color: var(--error); font-weight: 500; }
+
+    /* ── Equipment checkboxes ── */
+    .checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.84rem; font-weight: 300; color: var(--ink); padding: 0.45rem 0.7rem; border: 1px solid var(--rule); border-radius: var(--radius); transition: border-color 0.2s, background 0.2s; user-select: none; }
+    .checkbox-label:hover { border-color: var(--accent); }
+    .checkbox-label input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent-dark); flex-shrink: 0; margin: 0; padding: 0; }
+    .checkbox-label.checked { border-color: var(--accent); background: rgba(200,169,110,0.06); }
 
     /* ── Contacts ── */
-    .contacts-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .contact-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 0.6rem;
-      align-items: end;
-      animation: fadeUp 0.25s ease forwards;
-    }
-    .contact-row input { margin: 0; }
-    .btn-remove {
-      background: none;
-      border: 1px solid var(--rule);
-      border-radius: var(--radius);
-      width: 36px; height: 36px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--ink-faint);
-      transition: border-color 0.2s, color 0.2s;
-      flex-shrink: 0;
-    }
+    .contacts-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .contact-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.55rem; align-items: end; animation: fadeUp 0.25s ease forwards; }
+    .btn-remove { background: none; border: 1px solid var(--rule); border-radius: var(--radius); width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); transition: border-color 0.2s, color 0.2s; flex-shrink: 0; }
     .btn-remove:hover { border-color: var(--error); color: var(--error); }
-    .btn-add {
-      background: none;
-      border: 1px dashed var(--rule);
-      border-radius: var(--radius);
-      padding: 0.6rem 1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      cursor: pointer;
-      display: flex; align-items: center; gap: 0.4rem;
-      transition: border-color 0.2s, color 0.2s;
-      width: 100%;
-      justify-content: center;
-    }
+    .btn-add { background: none; border: 1px dashed var(--rule); border-radius: var(--radius); padding: 0.55rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; color: var(--ink-soft); cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: border-color 0.2s, color 0.2s; width: 100%; justify-content: center; }
     .btn-add:hover { border-color: var(--accent); color: var(--accent-dark); }
 
-    /* ── Checkbox group (equipment) ── */
-    .checkbox-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-    }
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 300;
-      color: var(--ink);
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--rule);
-      border-radius: var(--radius);
-      transition: border-color 0.2s, background 0.2s;
-      user-select: none;
-    }
-    .checkbox-label:hover { border-color: var(--accent); }
-    .checkbox-label input[type="checkbox"] {
-      width: 15px; height: 15px;
-      accent-color: var(--accent-dark);
-      flex-shrink: 0;
-      margin: 0; padding: 0;
-    }
-    .checkbox-label.checked {
-      border-color: var(--accent);
-      background: rgba(200,169,110,0.06);
-    }
-
     /* ── Submit ── */
-    .submit-area {
-      margin-top: 0.5rem;
-      animation: fadeUp 0.45s ease 0.4s both;
-    }
-    .btn-submit {
-      width: 100%;
-      background: var(--ink);
-      color: #ffffff;
-      border: none;
-      border-radius: var(--radius);
-      padding: 1rem;
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.05rem;
-      font-style: italic;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.2s, transform 0.1s;
-    }
+    .submit-area { margin-top: 0.5rem; animation: fadeUp 0.45s ease 0.4s both; }
+    .btn-submit { width: 100%; background: var(--ink); color: #fff; border: none; border-radius: var(--radius); padding: 1rem; font-family: 'DM Serif Display', serif; font-size: 1.05rem; font-style: italic; cursor: pointer; position: relative; overflow: hidden; transition: background 0.2s, transform 0.1s; }
     .btn-submit:hover { background: #2d2d4e; }
     .btn-submit:active { transform: scale(0.99); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-submit .btn-text { transition: opacity 0.2s; }
-    .btn-submit .btn-loading {
-      position: absolute; inset: 0;
-      display: none; align-items: center; justify-content: center;
-      gap: 0.5rem;
-    }
+    .btn-submit .btn-loading { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; gap: 0.5rem; }
     .btn-submit.loading .btn-text { opacity: 0; }
     .btn-submit.loading .btn-loading { display: flex; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
 
-    .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── Success ── */
+    .success-screen { display: none; text-align: center; padding: 3rem 2rem; background: var(--surface-card); border: 1px solid var(--rule); border-radius: var(--radius); }
+    .success-screen.visible { display: block; animation: fadeUp 0.5s ease forwards; }
+    .success-icon { width: 60px; height: 60px; border-radius: 50%; background: #2e7d5a; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+    .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.75rem; }
+    .success-screen p { color: var(--ink-soft); font-weight: 300; line-height: 1.7; font-size: 0.9rem; }
 
-    /* ── Success state ── */
-    .success-screen {
-      display: none;
-      text-align: center;
-      padding: 3rem 2rem;
-      background: var(--surface-card);
-      border: 1px solid var(--rule);
-      border-radius: var(--radius);
-      animation: fadeUp 0.5s ease forwards;
-    }
-    .success-screen.visible { display: block; }
-    .success-icon {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      background: var(--success);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.5rem;
-    }
-    .success-icon svg { color: white; }
-    .success-screen h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.8rem;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 0.75rem;
-    }
-    .success-screen p {
-      color: var(--ink-soft);
-      font-weight: 300;
-      line-height: 1.7;
-      font-size: 0.9rem;
-    }
-
-    /* ── Error banner ── */
-    .error-banner {
-      background: #fdf2f2;
-      border: 1px solid #f5c6c6;
-      border-radius: var(--radius);
-      padding: 0.9rem 1.2rem;
-      font-size: 0.85rem;
-      color: var(--error);
-      display: none;
-      margin-bottom: 1rem;
-    }
+    .error-banner { background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: var(--radius); padding: 0.85rem 1.1rem; font-size: 0.83rem; color: var(--error); display: none; margin-bottom: 1rem; }
     .error-banner.visible { display: block; }
 
     @media (max-width: 520px) {
       .field-row { grid-template-columns: 1fr; }
       .checkbox-group { grid-template-columns: 1fr; }
       .contact-row { grid-template-columns: 1fr auto; }
-      .contact-row input:last-of-type { grid-column: 1; }
+      .contact-row input:nth-child(2) { grid-column: 1; }
     }
   </style>
 </head>
@@ -387,22 +185,19 @@
   </div>
 </div>
 
-<!-- Member info strip (populated from URL params) -->
-<div class="member-strip" id="memberStrip" style="display:none">
-  <span>Booking as: <strong id="stripName"></strong></span>
-  <span id="stripCompany" style="display:none">Company: <strong id="stripCompanyName"></strong></span>
+<div class="member-strip" id="memberStrip">
+  Booking as: <strong id="stripName"></strong>
+  <span id="stripCompanyWrap" style="display:none">· Company: <strong id="stripCompanyName"></strong></span>
 </div>
 
 <div class="form-wrapper">
   <div id="errorBanner" class="error-banner"></div>
 
   <form id="bookingForm" novalidate>
-
-    <!-- Hidden fields -->
-    <input type="hidden" id="memberId" name="memberId" />
-    <input type="hidden" id="memberName" name="memberName" />
-    <input type="hidden" id="companyId" name="companyId" />
-    <input type="hidden" id="companyName" name="companyName" />
+    <input type="hidden" id="memberId" />
+    <input type="hidden" id="memberName" />
+    <input type="hidden" id="companyId" />
+    <input type="hidden" id="companyName" />
 
     <!-- Section 1: Resource -->
     <div class="section">
@@ -413,10 +208,32 @@
       <div class="section-body">
         <div class="field">
           <label for="resourceId">Room / Resource <span class="req">*</span></label>
-          <select id="resourceId" name="resourceId">
+          <select id="resourceId">
             <option value="">Loading resources…</option>
           </select>
           <div class="field-error" id="err-resource">Please select a resource.</div>
+        </div>
+
+        <!-- Resource detail card -->
+        <div id="resourceDetail">
+          <div id="rcLoading" class="rc-loading">
+            <div class="spinner-sm"></div> Loading room details…
+          </div>
+          <div id="rcInner" class="rc-inner" style="display:none">
+            <div class="rc-top">
+              <div>
+                <div class="rc-name" id="rcName"></div>
+                <div class="rc-type" id="rcType"></div>
+              </div>
+              <div class="rc-badge unknown" id="rcBadge">—</div>
+            </div>
+            <div class="rc-meta" id="rcMeta"></div>
+            <div class="rc-divider"></div>
+            <div id="rcAvailability" style="display:none">
+              <div class="av-label">Availability on selected date</div>
+              <div id="avContent"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -430,28 +247,28 @@
       <div class="section-body">
         <div class="field-row">
           <div class="field">
-            <label for="date">Date <span class="req">*</span></label>
-            <input type="date" id="date" name="date" />
+            <label for="bookingDate">Date <span class="req">*</span></label>
+            <input type="date" id="bookingDate" />
             <div class="field-error" id="err-date">Please select a date.</div>
           </div>
-          <div class="field"><!-- spacer --></div>
+          <div></div>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="startTime">Start Time <span class="req">*</span></label>
-            <input type="time" id="startTime" name="startTime" />
+            <input type="time" id="startTime" />
             <div class="field-error" id="err-start">Please enter a start time.</div>
           </div>
           <div class="field">
             <label for="endTime">End Time <span class="req">*</span></label>
-            <input type="time" id="endTime" name="endTime" />
-            <div class="field-error" id="err-end">Please enter an end time after the start.</div>
+            <input type="time" id="endTime" />
+            <div class="field-error" id="err-end">End time must be after start time.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Section 3: Booking Details -->
+    <!-- Section 3: Details -->
     <div class="section">
       <div class="section-header">
         <div class="section-number">3</div>
@@ -460,47 +277,35 @@
       <div class="section-body">
         <div class="field">
           <label for="purpose">Purpose / Reason for Booking <span class="req">*</span></label>
-          <textarea id="purpose" name="purpose" placeholder="Briefly describe why you're requesting this space…"></textarea>
+          <textarea id="purpose" placeholder="Briefly describe why you're requesting this space…"></textarea>
           <div class="field-error" id="err-purpose">Please describe the purpose of your booking.</div>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="attendees">Number of Attendees <span class="req">*</span></label>
-            <input type="number" id="attendees" name="attendees" min="1" placeholder="e.g. 8" />
+            <input type="number" id="attendees" min="1" placeholder="e.g. 8" />
             <div class="field-error" id="err-attendees">Please enter the expected number of attendees.</div>
           </div>
         </div>
         <div class="field">
           <label>Equipment Needed</label>
-          <div class="checkbox-group" id="equipmentGroup">
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Projector" /> Projector
-            </label>
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Whiteboard" /> Whiteboard
-            </label>
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Video Conferencing" /> Video Conferencing
-            </label>
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Speaker System" /> Speaker System
-            </label>
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Microphone" /> Microphone
-            </label>
-            <label class="checkbox-label" onclick="this.classList.toggle('checked')">
-              <input type="checkbox" name="equipment" value="Catering Setup" /> Catering Setup
-            </label>
+          <div class="checkbox-group">
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Projector" /> Projector</label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Whiteboard" /> Whiteboard</label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Video Conferencing" /> Video Conferencing</label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Speaker System" /> Speaker System</label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Microphone" /> Microphone</label>
+            <label class="checkbox-label" onclick="this.classList.toggle('checked')"><input type="checkbox" name="equipment" value="Catering Setup" /> Catering Setup</label>
           </div>
         </div>
         <div class="field">
           <label for="notes">Special Requests / Notes</label>
-          <textarea id="notes" name="notes" placeholder="Any additional setup requirements, accessibility needs, or other notes…"></textarea>
+          <textarea id="notes" placeholder="Any additional setup requirements, accessibility needs, or other notes…"></textarea>
         </div>
       </div>
     </div>
 
-    <!-- Section 4: Additional Contacts -->
+    <!-- Section 4: Contacts -->
     <div class="section">
       <div class="section-header">
         <div class="section-number">4</div>
@@ -510,31 +315,23 @@
         <p class="field-hint">Add anyone else who should be associated with this booking request.</p>
         <div class="contacts-list" id="contactsList"></div>
         <button type="button" class="btn-add" onclick="addContact()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
           Add a contact
         </button>
       </div>
     </div>
 
-    <!-- Submit -->
     <div class="submit-area">
       <button type="submit" class="btn-submit" id="submitBtn">
         <span class="btn-text">Submit Booking Request</span>
-        <span class="btn-loading">
-          <span class="spinner"></span>
-          Submitting…
-        </span>
+        <span class="btn-loading"><span class="spinner"></span> Submitting…</span>
       </button>
     </div>
-
   </form>
 
-  <!-- Success screen -->
   <div class="success-screen" id="successScreen">
     <div class="success-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Request Submitted</h2>
     <p>Your booking request has been received and is <strong>pending review</strong>.<br/>Our team will confirm or follow up with you shortly.</p>
@@ -542,184 +339,290 @@
 </div>
 
 <script>
-  // ── Config ─────────────────────────────────────────────────────────────────
-  // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz50W1fRolQeXVG1Ohp6DSrVHOj9zGsZKiBwBZjWvLAR0Nsw0xiDphK04K3GQ6Zat1Y/exec';
+  // ─── CONFIG — paste your Apps Script Web App URL here ───────────────────────
+  const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
-  // ── Read URL params (passed by OfficeRnD portal) ────────────────────────────
-  const params = new URLSearchParams(window.location.search);
-  const memberId   = params.get('memberId')   || '';
-  const memberName = params.get('memberName') || '';
-  const companyId  = params.get('companyId')  || '';
-  const companyName = params.get('companyName') || '';
-
-  document.getElementById('memberId').value   = memberId;
-  document.getElementById('memberName').value  = memberName;
-  document.getElementById('companyId').value  = companyId;
-  document.getElementById('companyName').value = companyName;
-
-  // Show member strip if we have data
-  if (memberName) {
-    document.getElementById('memberStrip').style.display = 'flex';
-    document.getElementById('stripName').textContent = memberName;
-    if (companyName) {
-      document.getElementById('stripCompany').style.display = 'flex';
-      document.getElementById('stripCompanyName').textContent = companyName;
-    }
+  // ── All API calls go through Apps Script as POST with an "action" field.
+  // Using text/plain avoids a CORS preflight on Apps Script's end.
+  async function api(payload) {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
   }
 
-  // Set min date to today
-  document.getElementById('date').min = new Date().toISOString().split('T')[0];
+  // ── URL params injected by OfficeRnD portal ──────────────────────────────────
+  const qp = new URLSearchParams(window.location.search);
+  ['memberId','memberName','companyId','companyName'].forEach(k => {
+    document.getElementById(k).value = qp.get(k) || '';
+  });
+  if (qp.get('memberName')) {
+    document.getElementById('memberStrip').style.display = 'flex';
+    document.getElementById('stripName').textContent = qp.get('memberName');
+    if (qp.get('companyName')) {
+      document.getElementById('stripCompanyWrap').style.display = 'inline';
+      document.getElementById('stripCompanyName').textContent = qp.get('companyName');
+    }
+  }
+  document.getElementById('bookingDate').min = new Date().toISOString().split('T')[0];
 
-  // ── Load resources from Apps Script proxy ──────────────────────────────────
+  // ── Load resources ───────────────────────────────────────────────────────────
   async function loadResources() {
     const sel = document.getElementById('resourceId');
     try {
-      const res = await fetch(`${APPS_SCRIPT_URL}?action=getResources`);
-      const data = await res.json();
+      const data = await api({ action: 'getResources' });
+      const list = data.resources || [];
+      if (!list.length) { sel.innerHTML = '<option value="">No resources found</option>'; return; }
       sel.innerHTML = '<option value="">Select a room or resource…</option>';
-      (data.resources || []).forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r._id;
-        opt.textContent = r.name + (r.capacity ? ` (cap. ${r.capacity})` : '');
-        sel.appendChild(opt);
+      list.forEach(r => {
+        const o = document.createElement('option');
+        o.value = r._id;
+        o.textContent = r.name + (r.capacity ? ` (cap. ${r.capacity})` : '');
+        sel.appendChild(o);
       });
-    } catch (e) {
-      sel.innerHTML = '<option value="">Could not load resources — please refresh</option>';
+    } catch(e) {
+      sel.innerHTML = '<option value="">Could not load — please refresh</option>';
     }
   }
   loadResources();
 
-  // ── Dynamic contacts ────────────────────────────────────────────────────────
-  let contactCount = 0;
-  function addContact() {
-    contactCount++;
-    const id = contactCount;
-    const list = document.getElementById('contactsList');
-    const row = document.createElement('div');
-    row.className = 'contact-row';
-    row.id = `contact-${id}`;
-    row.innerHTML = `
-      <input type="text"  placeholder="Full name"          data-contact="${id}" data-field="name"  />
-      <input type="email" placeholder="Email address"      data-contact="${id}" data-field="email" />
-      <button type="button" class="btn-remove" title="Remove" onclick="removeContact(${id})">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
-        </svg>
-      </button>`;
-    list.appendChild(row);
-  }
-  function removeContact(id) {
-    document.getElementById(`contact-${id}`)?.remove();
-  }
+  // ── Resource selection → show detail card ───────────────────────────────────
+  document.getElementById('resourceId').addEventListener('change', function() {
+    if (!this.value) { document.getElementById('resourceDetail').classList.remove('visible'); return; }
+    loadResourceDetail(this.value);
+  });
 
-  // ── Validation ──────────────────────────────────────────────────────────────
-  function showError(id, show) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('visible', show);
-  }
-  function markField(id, hasError) {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('error', hasError);
-  }
-
-  function validate() {
-    let valid = true;
-    const resource  = document.getElementById('resourceId').value;
-    const date      = document.getElementById('date').value;
-    const startTime = document.getElementById('startTime').value;
-    const endTime   = document.getElementById('endTime').value;
-    const purpose   = document.getElementById('purpose').value.trim();
-    const attendees = document.getElementById('attendees').value;
-
-    [['resourceId','err-resource',!resource],
-     ['date','err-date',!date],
-     ['startTime','err-start',!startTime],
-     ['endTime','err-end',!endTime || (startTime && endTime <= startTime)],
-     ['purpose','err-purpose',!purpose],
-     ['attendees','err-attendees',!attendees || parseInt(attendees) < 1]
-    ].forEach(([fieldId, errId, hasErr]) => {
-      markField(fieldId, hasErr);
-      showError(errId, hasErr);
-      if (hasErr) valid = false;
-    });
-    return valid;
-  }
-
-  // ── Collect contacts ─────────────────────────────────────────────────────────
-  function collectContacts() {
-    const contacts = [];
-    const rows = document.querySelectorAll('#contactsList .contact-row');
-    rows.forEach(row => {
-      const name  = row.querySelector('[data-field="name"]')?.value.trim()  || '';
-      const email = row.querySelector('[data-field="email"]')?.value.trim() || '';
-      if (name || email) contacts.push({ name, email });
-    });
-    return contacts;
-  }
-
-  // ── Collect equipment ────────────────────────────────────────────────────────
-  function collectEquipment() {
-    return [...document.querySelectorAll('input[name="equipment"]:checked')]
-      .map(cb => cb.value);
-  }
-
-  // ── Submit ───────────────────────────────────────────────────────────────────
-  document.getElementById('bookingForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    document.getElementById('errorBanner').classList.remove('visible');
-
-    if (!validate()) {
-      document.querySelector('.field-error.visible')
-        ?.closest('.section')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
+  async function loadResourceDetail(rid) {
+    const card = document.getElementById('resourceDetail');
+    card.classList.add('visible');
+    document.getElementById('rcLoading').style.display = 'flex';
+    document.getElementById('rcInner').style.display = 'none';
+    try {
+      const data = await api({ action: 'getResource', resourceId: rid });
+      renderResourceCard(data.resource || {});
+      refreshAvailability();
+    } catch(e) {
+      document.getElementById('rcLoading').innerHTML = '<span style="color:var(--error);font-size:0.8rem">Could not load room details.</span>';
     }
+  }
 
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.classList.add('loading');
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-    const date      = document.getElementById('date').value;
-    const startTime = document.getElementById('startTime').value;
-    const endTime   = document.getElementById('endTime').value;
+  function renderResourceCard(r) {
+    document.getElementById('rcLoading').style.display = 'none';
+    document.getElementById('rcInner').style.display = 'block';
+    document.getElementById('rcName').textContent = r.name || '—';
+    document.getElementById('rcType').textContent = (r.resourceType && r.resourceType.name) || r.type || '';
+    setBadge('unknown', 'Checking…');
 
-    const payload = {
-      memberId:    document.getElementById('memberId').value,
-      memberName:  document.getElementById('memberName').value,
-      companyId:   document.getElementById('companyId').value,
-      companyName: document.getElementById('companyName').value,
-      resourceId:  document.getElementById('resourceId').value,
-      resourceName: document.getElementById('resourceId').selectedOptions[0]?.text || '',
-      start: new Date(`${date}T${startTime}:00`).toISOString(),
-      end:   new Date(`${date}T${endTime}:00`).toISOString(),
-      purpose:   document.getElementById('purpose').value.trim(),
-      attendees: parseInt(document.getElementById('attendees').value),
-      equipment: collectEquipment(),
-      notes:     document.getElementById('notes').value.trim(),
-      contacts:  collectContacts(),
-    };
+    const meta = document.getElementById('rcMeta');
+    meta.innerHTML = '';
+    if (r.capacity)          meta.innerHTML += metaItem(icoGroup(), `Capacity: ${r.capacity}`);
+    if (r.location && r.location.name) meta.innerHTML += metaItem(icoPin(), r.location.name);
+    if (r.floor && r.floor.name)       meta.innerHTML += metaItem(icoFloor(), `Floor: ${r.floor.name}`);
+    if (r.description) meta.innerHTML += `<div style="flex-basis:100%;font-size:0.78rem;color:var(--ink-soft);font-weight:300;line-height:1.55;margin-top:0.1rem">${esc(r.description)}</div>`;
+  }
+
+  function metaItem(icon, text) { return `<div class="rc-meta-item">${icon}<span>${esc(text)}</span></div>`; }
+  function icoGroup() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`; }
+  function icoPin()   { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`; }
+  function icoFloor() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/></svg>`; }
+
+  function setBadge(type, label) {
+    const b = document.getElementById('rcBadge');
+    b.className = 'rc-badge ' + type;
+    b.textContent = label;
+  }
+
+  // ── Availability — refresh whenever date/time changes ────────────────────────
+  let avTimer = null;
+  ['bookingDate','startTime','endTime'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => {
+      clearTimeout(avTimer);
+      avTimer = setTimeout(refreshAvailability, 400);
+    });
+  });
+
+  async function refreshAvailability() {
+    const rid  = document.getElementById('resourceId').value;
+    const date = document.getElementById('bookingDate').value;
+    if (!rid || !date) return;
+
+    const avSec = document.getElementById('rcAvailability');
+    const avContent = document.getElementById('avContent');
+    avSec.style.display = 'block';
+    avContent.innerHTML = `<div class="av-loading"><div class="spinner-sm"></div> Checking availability…</div>`;
+    setBadge('unknown', 'Checking…');
 
     try {
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'text/plain' }, // text/plain avoids CORS preflight
+      const data = await api({ action: 'getAvailability', resourceId: rid, date });
+      renderAvailability(data.bookings || []);
+    } catch(e) {
+      avContent.innerHTML = '<span style="font-size:0.78rem;color:var(--ink-faint)">Could not load availability.</span>';
+    }
+  }
+
+  function renderAvailability(bookings) {
+    const startVal = document.getElementById('startTime').value;
+    const endVal   = document.getElementById('endTime').value;
+    const avContent = document.getElementById('avContent');
+
+    const HOUR_START = 7, HOUR_END = 21;
+    const DAY_MINS = (HOUR_END - HOUR_START) * 60;
+
+    function toMin(iso) {
+      const d = new Date(iso);
+      return d.getHours() * 60 + d.getMinutes();
+    }
+    function offsetMin(m) { return Math.max(0, Math.min(DAY_MINS, m - HOUR_START * 60)); }
+
+    const segs = bookings.map(b => {
+      const sM = offsetMin(toMin(b.start));
+      const eM = offsetMin(toMin(b.end));
+      return { sM, eM, label: fmtTime(new Date(b.start)) + ' – ' + fmtTime(new Date(b.end)) };
+    }).filter(s => s.eM > s.sM);
+
+    // Selected slot
+    let selSeg = null, conflict = false;
+    if (startVal && endVal && endVal > startVal) {
+      const [sh,sm] = startVal.split(':').map(Number);
+      const [eh,em] = endVal.split(':').map(Number);
+      selSeg = { sM: offsetMin(sh*60+sm), eM: offsetMin(eh*60+em) };
+      conflict = segs.some(s => selSeg.sM < s.eM && selSeg.eM > s.sM);
+    }
+
+    // Badge
+    if (selSeg) {
+      setBadge(conflict ? 'unavailable' : 'available', conflict ? 'Conflict' : 'Available');
+    } else {
+      setBadge(segs.length ? 'unavailable' : 'available', segs.length ? 'Has bookings' : 'Open today');
+    }
+
+    // Legend
+    let html = `<div class="tl-legend">`;
+    if (segs.length)  html += `<span><span class="tl-swatch" style="background:#f5a8a8"></span>Booked</span>`;
+    if (selSeg)       html += `<span><span class="tl-swatch" style="background:var(--accent);opacity:0.85"></span>Your request</span>`;
+    html += `</div>`;
+
+    // Bar
+    html += `<div class="tl-bar">`;
+    segs.forEach(s => {
+      const l = (s.sM/DAY_MINS*100).toFixed(2), w = ((s.eM-s.sM)/DAY_MINS*100).toFixed(2);
+      html += `<div class="tl-seg booked" style="left:${l}%;width:${w}%" title="${esc(s.label)}"></div>`;
+    });
+    if (selSeg) {
+      const l = (selSeg.sM/DAY_MINS*100).toFixed(2), w = ((selSeg.eM-selSeg.sM)/DAY_MINS*100).toFixed(2);
+      html += `<div class="tl-seg selected" style="left:${l}%;width:${w}%"></div>`;
+    }
+    html += `</div>`;
+
+    // Hour labels
+    html += `<div class="tl-hours">`;
+    for (let h = HOUR_START; h <= HOUR_END; h += 2) {
+      html += `<span class="tl-hour">${h > 12 ? h-12 : h}${h >= 12 ? 'p':'a'}</span>`;
+    }
+    html += `</div>`;
+
+    // Booking list
+    if (!segs.length) {
+      html += `<div class="no-bookings">No other bookings on this day</div>`;
+    } else {
+      html += `<div class="bookings-list">` + segs.map(s => `<div class="booking-chip">${esc(s.label)}</div>`).join('') + `</div>`;
+    }
+    if (conflict) {
+      html += `<div class="conflict-warn">⚠ Your time overlaps an existing booking. You can still submit — our team will review it.</div>`;
+    }
+
+    avContent.innerHTML = html;
+  }
+
+  function fmtTime(d) { return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+
+  // ── Contacts ─────────────────────────────────────────────────────────────────
+  let cCount = 0;
+  function addContact() {
+    cCount++;
+    const row = document.createElement('div');
+    row.className = 'contact-row'; row.id = `c-${cCount}`;
+    row.innerHTML = `
+      <input type="text"  placeholder="Full name"     data-field="name"  />
+      <input type="email" placeholder="Email address" data-field="email" />
+      <button type="button" class="btn-remove" onclick="document.getElementById('c-${cCount}').remove()">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="10" y2="10"/><line x1="10" y1="1" x2="1" y2="10"/></svg>
+      </button>`;
+    document.getElementById('contactsList').appendChild(row);
+  }
+
+  // ── Validation ────────────────────────────────────────────────────────────────
+  function validate() {
+    let ok = true;
+    const checks = [
+      ['resourceId', 'err-resource', !document.getElementById('resourceId').value],
+      ['bookingDate','err-date',     !document.getElementById('bookingDate').value],
+      ['startTime',  'err-start',    !document.getElementById('startTime').value],
+      ['endTime',    'err-end',      !document.getElementById('endTime').value || document.getElementById('endTime').value <= document.getElementById('startTime').value],
+      ['purpose',    'err-purpose',  !document.getElementById('purpose').value.trim()],
+      ['attendees',  'err-attendees',!document.getElementById('attendees').value || parseInt(document.getElementById('attendees').value) < 1],
+    ];
+    checks.forEach(([fid, eid, bad]) => {
+      document.getElementById(fid)?.classList.toggle('error', bad);
+      document.getElementById(eid)?.classList.toggle('visible', bad);
+      if (bad) ok = false;
+    });
+    return ok;
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────────
+  document.getElementById('bookingForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    document.getElementById('errorBanner').classList.remove('visible');
+    if (!validate()) {
+      document.querySelector('.field-error.visible')?.closest('.section')?.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.classList.add('loading');
+
+    const date = document.getElementById('bookingDate').value;
+    const st   = document.getElementById('startTime').value;
+    const et   = document.getElementById('endTime').value;
+
+    const contacts = [...document.querySelectorAll('#contactsList .contact-row')].map(r => ({
+      name:  r.querySelector('[data-field="name"]')?.value.trim()  || '',
+      email: r.querySelector('[data-field="email"]')?.value.trim() || '',
+    })).filter(c => c.name || c.email);
+
+    const equipment = [...document.querySelectorAll('input[name="equipment"]:checked')].map(c => c.value);
+
+    try {
+      const data = await api({
+        action:      'createBooking',
+        memberId:    document.getElementById('memberId').value,
+        memberName:  document.getElementById('memberName').value,
+        companyId:   document.getElementById('companyId').value,
+        companyName: document.getElementById('companyName').value,
+        resourceId:  document.getElementById('resourceId').value,
+        resourceName: document.getElementById('resourceId').selectedOptions[0]?.text || '',
+        start: new Date(`${date}T${st}:00`).toISOString(),
+        end:   new Date(`${date}T${et}:00`).toISOString(),
+        purpose:   document.getElementById('purpose').value.trim(),
+        attendees: parseInt(document.getElementById('attendees').value),
+        equipment, contacts,
+        notes: document.getElementById('notes').value.trim(),
       });
-      const data = await res.json();
       if (data.success) {
         document.getElementById('bookingForm').style.display = 'none';
         document.getElementById('successScreen').classList.add('visible');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        throw new Error(data.error || 'Unknown error');
-      }
-    } catch (err) {
-      const banner = document.getElementById('errorBanner');
-      banner.textContent = `Submission failed: ${err.message}. Please try again or contact support.`;
-      banner.classList.add('visible');
-      btn.disabled = false;
-      btn.classList.remove('loading');
+      } else { throw new Error(data.error || 'Unknown error'); }
+    } catch(err) {
+      const b = document.getElementById('errorBanner');
+      b.textContent = `Submission failed: ${err.message}. Please try again or contact support.`;
+      b.classList.add('visible');
+      btn.disabled = false; btn.classList.remove('loading');
     }
   });
 </script>
